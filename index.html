@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Acme Market | Welcome</title>
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <nav>
+          <a href="index.html" aria-label="Acme Market home">
+            <strong>Acme Market</strong>
+          </a>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="products.html">Products</a></li>
+            <li>
+              <a href="cart.html">Cart (<span data-cart-count>0</span>)</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="hero">
+        <h1 class="page-title">Everyday Essentials, Delivered Fast</h1>
+        <p>
+          Discover curated collections of home, wellness, and tech products
+          designed to make your day-to-day smoother. Shop confidently with a
+          seamless cart experience and transparent pricing.
+        </p>
+        <a class="cta" href="products.html">Browse this week's picks →</a>
+      </section>
+
+      <section>
+        <h2 style="margin-bottom: 1.5rem">Why shop with us?</h2>
+        <div class="product-grid">
+          <article class="product-card">
+            <h3>Fresh Finds</h3>
+            <p>
+              Weekly drops from independent makers and established brands so you
+              can explore something new every time you visit.
+            </p>
+          </article>
+          <article class="product-card">
+            <h3>Carbon Neutral</h3>
+            <p>
+              All shipments are offset with verified environmental projects, and
+              we prioritize recycled packaging wherever possible.
+            </p>
+          </article>
+          <article class="product-card">
+            <h3>Easy Returns</h3>
+            <p>
+              Changed your mind? Start a return directly from your cart page and
+              print a prepaid label in seconds.
+            </p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>© <span id="year"></span> Acme Market. All rights reserved.</p>
+    </footer>
+
+    <script src="assets/js/cart.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('year').textContent = new Date().getFullYear();
+      });
+    </script>
+  </body>
+</html>
