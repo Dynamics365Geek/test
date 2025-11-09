@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Acme Market | Cart</title>
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <nav>
+          <a href="index.html" aria-label="Acme Market home">
+            <strong>Acme Market</strong>
+          </a>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="products.html">Products</a></li>
+            <li>
+              <a href="cart.html">Cart (<span data-cart-count>0</span>)</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section style="margin-bottom: 2rem">
+        <h1 class="page-title">Your shopping cart</h1>
+        <p style="line-height: 1.6; max-width: 640px">
+          Review your selections, update quantities, or remove items before you
+          proceed to checkout. Changes are saved automatically.
+        </p>
+      </section>
+
+      <section id="cart-section" style="display: none">
+        <table class="cart-table">
+          <thead>
+            <tr>
+              <th scope="col">Product</th>
+              <th scope="col">Unit price</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Subtotal</th>
+              <th scope="col" style="width: 120px"></th>
+            </tr>
+          </thead>
+          <tbody id="cart-items"></tbody>
+        </table>
+
+        <div class="cart-summary">
+          <p>Total: <span id="summary-total">$0.00</span></p>
+          <button id="clear-cart" class="btn-outline">Clear cart</button>
+        </div>
+      </section>
+
+      <section id="empty-state" style="text-align: center; padding: 4rem 0">
+        <h2 style="font-size: 2rem; margin-bottom: 0.75rem">Your cart is empty</h2>
+        <p style="line-height: 1.6; margin-bottom: 1.5rem">
+          Start adding products from our latest collection to see them here.
+        </p>
+        <a class="cta" href="products.html">Browse products →</a>
+      </section>
+    </main>
+
+    <footer>
+      <p>© <span id="year"></span> Acme Market. All rights reserved.</p>
+    </footer>
+
+    <script src="assets/js/cart.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        const cartSection = document.getElementById('cart-section');
+        const emptyState = document.getElementById('empty-state');
+        const tableBody = document.getElementById('cart-items');
+        const summaryTotal = document.getElementById('summary-total');
+        const clearButton = document.getElementById('clear-cart');
+
+        const formatCurrency = (value) =>
+          new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+          }).format(value);
+
+        const renderCart = () => {
+          const items = Cart.getCart();
+
+          if (!items.length) {
+            cartSection.style.display = 'none';
+            emptyState.style.display = 'block';
+            summaryTotal.textContent = formatCurrency(0);
+            return;
+          }
+
+          cartSection.style.display = 'block';
+          emptyState.style.display = 'none';
+
+          tableBody.innerHTML = '';
+
+          items.forEach((item) => {
+            const row = document.createElement('tr');
+            row.dataset.productId = item.id;
+            row.innerHTML = `
+              <td>
+                <strong>${item.name}</strong>
+              </td>
+              <td>${formatCurrency(item.price)}</td>
+              <td>
+                <div class="quantity-controls">
+                  <button type="button" data-action="decrease" aria-label="Decrease quantity">
+                    &minus;
+                  </button>
+                  <span>${item.quantity}</span>
+                  <button type="button" data-action="increase" aria-label="Increase quantity">
+                    &#43;
+                  </button>
+                </div>
+              </td>
+              <td>${formatCurrency(item.price * item.quantity)}</td>
+              <td>
+                <button type="button" class="btn-outline" data-action="remove">
+                  Remove
+                </button>
+              </td>
+            `;
+            tableBody.appendChild(row);
+          });
+
+          summaryTotal.textContent = formatCurrency(Cart.getCartTotal());
+        };
+
+        tableBody.addEventListener('click', (event) => {
+          const button = event.target.closest('button[data-action]');
+          if (!button) {
+            return;
+          }
+
+          const row = button.closest('tr');
+          const productId = row.dataset.productId;
+          const action = button.dataset.action;
+          const current = Cart.getCart().find((entry) => entry.id === productId);
+
+          if (!current) {
+            return;
+          }
+
+          if (action === 'increase') {
+            Cart.updateQuantity(productId, current.quantity + 1);
+          } else if (action === 'decrease') {
+            Cart.updateQuantity(productId, current.quantity - 1);
+          } else if (action === 'remove') {
+            Cart.removeItem(productId);
+          }
+
+          renderCart();
+        });
+
+        clearButton.addEventListener('click', () => {
+          Cart.clearCart();
+          renderCart();
+        });
+
+        renderCart();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Acme Market | Products</title>
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <nav>
+          <a href="index.html" aria-label="Acme Market home">
+            <strong>Acme Market</strong>
+          </a>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="products.html">Products</a></li>
+            <li>
+              <a href="cart.html">Cart (<span data-cart-count>0</span>)</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section style="margin-bottom: 2rem">
+        <h1 class="page-title">Shop the latest arrivals</h1>
+        <p style="line-height: 1.6; max-width: 640px">
+          Add products to your cart and review them at checkout. Quantities can
+          be adjusted later, so feel free to explore new favorites.
+        </p>
+      </section>
+
+      <div id="announcement" style="display: none; margin-bottom: 1.5rem"></div>
+
+      <section class="product-grid">
+        <article class="product-card">
+          <div
+            style="
+              background: linear-gradient(135deg, #f97316, #facc15);
+              height: 160px;
+              border-radius: 0.75rem;
+            "
+          ></div>
+          <h3>Sunrise Brew Kit</h3>
+          <p>
+            A pour-over starter set with ethically sourced beans and a
+            double-walled mug for the perfect morning ritual.
+          </p>
+          <p class="price">$34.00</p>
+          <button
+            class="btn add-to-cart"
+            data-product-id="sku-brew-kit"
+            data-product-name="Sunrise Brew Kit"
+            data-product-price="34"
+          >
+            Add to cart
+          </button>
+        </article>
+
+        <article class="product-card">
+          <div
+            style="
+              background: linear-gradient(135deg, #22d3ee, #2563eb);
+              height: 160px;
+              border-radius: 0.75rem;
+            "
+          ></div>
+          <h3>Lumina Desk Lamp</h3>
+          <p>
+            A minimalist LED lamp with three brightness levels, wireless phone
+            charging, and glare-free illumination.
+          </p>
+          <p class="price">$58.00</p>
+          <button
+            class="btn add-to-cart"
+            data-product-id="sku-desk-lamp"
+            data-product-name="Lumina Desk Lamp"
+            data-product-price="58"
+          >
+            Add to cart
+          </button>
+        </article>
+
+        <article class="product-card">
+          <div
+            style="
+              background: linear-gradient(135deg, #4f46e5, #a855f7);
+              height: 160px;
+              border-radius: 0.75rem;
+            "
+          ></div>
+          <h3>CloudSoft Throw</h3>
+          <p>
+            Ultra-soft, recycled-fiber throw blanket perfect for movie nights,
+            afternoon naps, and cozy reading corners.
+          </p>
+          <p class="price">$42.00</p>
+          <button
+            class="btn add-to-cart"
+            data-product-id="sku-throw"
+            data-product-name="CloudSoft Throw"
+            data-product-price="42"
+          >
+            Add to cart
+          </button>
+        </article>
+      </section>
+    </main>
+
+    <footer>
+      <p>© <span id="year"></span> Acme Market. All rights reserved.</p>
+    </footer>
+
+    <script src="assets/js/cart.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        const message = document.getElementById('announcement');
+
+        const showMessage = (text) => {
+          message.textContent = text;
+          message.style.display = 'block';
+          message.style.background = '#ecfdf5';
+          message.style.border = '1px solid #34d399';
+          message.style.color = '#065f46';
+          message.style.padding = '0.85rem 1rem';
+          message.style.borderRadius = '0.75rem';
+          setTimeout(() => {
+            message.style.display = 'none';
+          }, 2500);
+        };
+
+        document.querySelectorAll('.add-to-cart').forEach((button) => {
+          button.addEventListener('click', () => {
+            const { productId, productName, productPrice } = button.dataset;
+
+            Cart.addItem({
+              id: productId,
+              name: productName,
+              price: Number(productPrice),
+            });
+            showMessage(`${productName} added to your cart.`);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
